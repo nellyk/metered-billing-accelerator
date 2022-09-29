@@ -45,3 +45,7 @@ jobs:
       with:
         name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
         path: src/Aggregator/bin/Debug/net6.0
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: /*.${{env.NBGV_SemVer2}}
+        generateReleaseNotes: true
