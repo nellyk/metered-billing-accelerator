@@ -45,3 +45,12 @@ jobs:
       with:
         name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
         path: src/Aggregator/bin/Debug/net6.0
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{env.NBGV_SemVer2}}"
+        prerelease: true
+        title: "Release build Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}"
+        files: |
+         *.zip
+
