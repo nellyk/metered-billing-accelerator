@@ -45,12 +45,17 @@ jobs:
       with:
         name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
         path: src/Aggregator/bin/Debug/net6.0
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - name: Download math result for job 2
+      uses: actions/download-artifact@v3
+      with:
+        name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
+    - name: create release
+      uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "${{env.NBGV_SemVer2}}"
         prerelease: true
         title: "Release build Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}"
         files: |
-         *.zip
+         Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
 
