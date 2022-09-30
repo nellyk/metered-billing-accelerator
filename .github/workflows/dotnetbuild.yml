@@ -57,5 +57,5 @@ jobs:
         prerelease: true
         title: "Release build Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}"
         files: |
-         Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
+         *.zip
 
