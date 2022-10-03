@@ -48,7 +48,9 @@ jobs:
     - name: Donwload Aggregator Build Artifacts
       uses: actions/download-artifact@v3
       with:
-        name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}    
+        name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
+    - name: Display structure of downloaded files
+      run: ls -R
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
