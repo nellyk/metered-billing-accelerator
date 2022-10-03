@@ -49,5 +49,5 @@ jobs:
         tag_name: ${{env.NBGV_SemVer2}}  
         fail_on_unmatched_files: true
         generate_release_notes: true
-        files: ./src/Aggregator/bin/Debug/net6.0  
+        files: ./src/Aggregator/bin/Debug  
 
