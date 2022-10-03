@@ -40,18 +40,27 @@ jobs:
     - name: Test
       working-directory: ./src
       run: dotnet test --no-build --verbosity normal
+    - name: Upload Aggregator Build Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
+        path: src/Aggregator/bin/Debug/net6.0
    release:
     name: Release Build
     runs-on: [ubuntu-latest]
     needs: build
     steps:
+      - name: Donwload Aggregator Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+         name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}    
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Switch to Release Folder
-        run: |
-          cd ./src/Aggregator/bin/Debug 
-          zip -r Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip .
-          ls -R
+#       - name: Switch to Release Folder
+#         run: |
+#           cd ./src/Aggregator/bin/Debug 
+#           zip -r Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip .
+#           ls -R
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -59,5 +68,5 @@ jobs:
           tag_name: ${{env.NBGV_SemVer2}}  
           fail_on_unmatched_files: true
           generate_release_notes: true
-          files: ./src/Aggregator/bin/Debug/Aggregator.${{env.NBGV_SemVer2}}.zip
+          files: Aggregator.${{env.NBGV_SemVer2}}.zip
 
