@@ -40,19 +40,23 @@ jobs:
     - name: Test
       working-directory: ./src
       run: dotnet test --no-build --verbosity normal
-    - name: Display structure of downloaded files
-      run: ls -R
-    - name: Switch to Release Folder
-      run: |
-        cd ./src/Aggregator/bin/Debug 
-        zip -r Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip .
-        ls -R
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        name: Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}
-        tag_name: ${{env.NBGV_SemVer2}}  
-        fail_on_unmatched_files: true
-        generate_release_notes: true
-        files: ./src/Aggregator/bin/Debug/Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip
+   release:
+    name: Release Build
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Switch to Release Folder
+        run: |
+          cd ./src/Aggregator/bin/Debug 
+          zip -r Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip .
+          ls -R
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Aggregator.${{env.NBGV_SemVer2}}
+          tag_name: ${{env.NBGV_SemVer2}}  
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          files: ./src/Aggregator/bin/Debug/Aggregator.${{env.NBGV_SemVer2}}.zip
 
