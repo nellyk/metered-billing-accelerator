@@ -54,7 +54,8 @@ jobs:
       - name: Display structure of downloaded files
         run: | 
             ls -R 
-            echo ${{needs.build.outputs}}
+            echo '${{ toJSON(github) }}'
+            echo ${{toJSON(needs.build.outputs)}}
 #       - name: Switch to Release Folder
 #         run: |
 #           cd ./src/Aggregator/bin/Debug 
