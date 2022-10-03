@@ -52,7 +52,9 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
       - name: Display structure of downloaded files
-        run: ls -R 
+        run: | 
+            ls -R 
+            echo ${{needs.build.outputs}}
 #       - name: Switch to Release Folder
 #         run: |
 #           cd ./src/Aggregator/bin/Debug 
@@ -65,6 +67,5 @@ jobs:
           tag_name: ${{env.NBGV_SemVer2}}  
           fail_on_unmatched_files: true
           generate_release_notes: true
-          files: Aggregator.windows-latest.${{env.NBGV_SemVer2}}.zip
-              | Aggregator.ubuntu-latest.${{env.NBGV_SemVer2}}.zip
-
+          files: ./Aggregator.windows-latest.${{env.NBGV_SemVer2}}.zip
+              | ./Aggregator.ubuntu-latest.${{env.NBGV_SemVer2}}.zip
