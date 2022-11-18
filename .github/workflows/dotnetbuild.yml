@@ -59,11 +59,11 @@ jobs:
             ls -R 
             echo '${{toJSON(job)}}'
             echo '${{ toJSON(steps) }}'
-#       - name: Switch to Release Folder
-#         run: |
-#           cd ./src/Aggregator/bin/Debug 
-#           zip -r Aggregator.${{ matrix.platform }}.${{env.NBGV_SemVer2}}.zip .
-#           ls -R
+      - name: Switch to Release Folder
+        run: |
+          zip -r Aggregator.windows-latest.${{needs.build.outputs.tagVersion}}.zip Aggregator.windows-latest.${{needs.build.outputs.tagVersion}}
+          zip -r Aggregator.ubuntu-latest.${{needs.build.outputs.tagVersion}}.zip Aggregator.ubuntu-latest.${{needs.build.outputs.tagVersion}}
+          ls -R
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
