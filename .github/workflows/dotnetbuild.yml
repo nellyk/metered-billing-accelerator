@@ -19,6 +19,8 @@ jobs:
       matrix:
         platform: [ windows-latest, ubuntu-latest ]
     runs-on: ${{ matrix.platform }}
+    outputs:
+      tagVersion: ${{ steps.nbgv.outputs.SemVer2 }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -28,6 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.300
     - name: Setup Semantic version
+      id: nbgv
       uses: dotnet/nbgv@v0.4.0
       with:
         setAllVars: true
@@ -64,9 +67,9 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Aggregator.${{env.NBGV_SemVer2}}
-          tag_name: ${{env.NBGV_SemVer2}}  
+          name: Aggregator.${{needs.build.outputs.tagVersion}}
+          tag_name: ${{needs.build.outputs.tagVersion}} 
           fail_on_unmatched_files: true
           generate_release_notes: true
-          files: ./Aggregator.windows-latest.${{env.NBGV_SemVer2}}.zip
-              | ./Aggregator.ubuntu-latest.${{env.NBGV_SemVer2}}.zip
+          files: ./Aggregator.windows-latest.${{needs.build.outputs.tagVersion}}.zip
+              | ./Aggregator.ubuntu-latest.${{needs.build.outputs.tagVersion}}.zip
