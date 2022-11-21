@@ -1,6 +1,11 @@
 name: .NET Build
 on:
   workflow_dispatch:
+   inputs:
+     versionIncrement:
+        description: 'set the version to release - please provide minor or major'
+        required: true
+        default: 'minor'
   push:
     paths:
       - './src/**'
@@ -34,6 +39,15 @@ jobs:
       uses: dotnet/nbgv@v0.4.0
       with:
         setAllVars: true
+    - name: increament 
+      id: versions
+      run: |
+          git config --local user.email  ${{ secrets.GITHUBEMAIL }}
+          git config --local user.name  ${{ github.actor }}
+          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
+          echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
+    - name: ⏩ Push version.json updates to main
+      run: git push origin main
     - name: Restore dependencies
       working-directory: ./src
       run: dotnet restore
