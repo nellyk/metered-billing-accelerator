@@ -23,6 +23,9 @@ jobs:
     name: Release Version
     runs-on: [ubuntu-latest]
     steps:
+     - uses: actions/checkout@v3
+       with:
+        fetch-depth: 0
      - name: increament-version
        id: version
        run: |
@@ -37,6 +40,7 @@ jobs:
       matrix:
         platform: [ windows-latest, ubuntu-latest ]
     runs-on: ${{ matrix.platform }}
+    needs: set-version
     outputs:
       tagVersion: ${{ steps.nbgv.outputs.SemVer2 }}
     steps:
