@@ -42,6 +42,7 @@ jobs:
     - name: increament 
       id: versions
       run: |
+          git config --local user.email  ${{ secrets.GITHUBEMAIL }}
           git config --local user.name  ${{ github.actor }}
           nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
           echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
