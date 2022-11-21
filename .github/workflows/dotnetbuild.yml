@@ -19,6 +19,19 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
   
 jobs:
+   set-version:
+    name: Release Version
+    runs-on: [ubuntu-latest]
+    steps:
+     - name: increament-version
+       id: version
+       run: |
+            git config --local user.email  ${{ secrets.GITHUBEMAIL }}
+            git config --local user.name  ${{ github.actor }}
+            nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
+            echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
+     - name: ⏩ Push version.json updates to main
+       run: git push origin main
    build:
     strategy:
       matrix:
@@ -39,15 +52,6 @@ jobs:
       uses: dotnet/nbgv@v0.4.0
       with:
         setAllVars: true
-    - name: increament 
-      id: versions
-      run: |
-          git config --local user.email  ${{ secrets.GITHUBEMAIL }}
-          git config --local user.name  ${{ github.actor }}
-          nbgv prepare-release --versionIncrement ${{ github.event.inputs.versionIncrement }}          
-          echo "::set-output name=MAIN_VERSION_COMMIT_MESSAGE::$(git log --format=%B -n 1 --skip 1)"
-    - name: ⏩ Push version.json updates to main
-      run: git push origin main
     - name: Restore dependencies
       working-directory: ./src
       run: dotnet restore
